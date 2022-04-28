@@ -28,7 +28,7 @@ def calculate_metall_price(data):
         return
 
 
-def calculate_fabric_layers(choosed_layers, area , fw):
+def calculate_fabric_layers(choosed_layers, area , fw , flange_reinforcment):
     try:
         area = eval(area)
         fw = int(fw)
@@ -39,7 +39,7 @@ def calculate_fabric_layers(choosed_layers, area , fw):
 
 
         current_layers = [P.raw_fabric_prices[i] for i in choosed_layers]
-        total_price = round(sum(current_layers)*area + flange_tape_area*P.raw_fabric_prices['Silitex 800 Red'] , 2) 
+        total_price = round(sum(current_layers)*area + flange_tape_area*P.raw_fabric_prices[flange_reinforcment] , 2) 
 
 
 
@@ -76,7 +76,7 @@ def calculate_final_cost(arr):
 
 def create_report(arr):
     
-    client, drawing_number, fej_type, steel_weight, steel_cost,  stain_less_steel_weight, stain_less_steel_cost, temperature, pressure, media, fej_layers, fej_area, fej_cost, insolation_volume, insolation_cost,  screw, screw_cost, final_cost = arr
+    client, drawing_number, fej_type, steel_weight, steel_cost,  stain_less_steel_weight, stain_less_steel_cost, temperature, pressure, media, fej_layers, fej_area, fej_cost, flange_reinforcement,insolation_volume, insolation_cost,  screw, screw_cost, final_cost = arr
 
     current_date = datetime.today().strftime('%Y-%m-%d')
 
@@ -97,12 +97,15 @@ def create_report(arr):
         "FEJ_LAYERS": fej_layers,
         "FEJ_AREA": fej_area,
         "FEJ_COST": fej_cost,
+        "FLANGE_REINFORCEMENT": flange_reinforcement,
         "INSOLATION_VOLUME": insolation_volume,
         "INSOLATION_COST": insolation_cost,
         "SCREW": screw,
         "SCREW_COST": screw_cost,
         "FINAL_COST": final_cost,
     }
+
+    sg.popup(flange_reinforcement)
 
     doc.render(context)
     final_file_name = f'{client} {drawing_number}.docx'
