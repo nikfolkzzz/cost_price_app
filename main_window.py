@@ -18,10 +18,8 @@ item_types = [
 metall_col_1 = [
     [sg.T('Металл', font='GothamPro 15', text_color='#fff', )],
     [sg.I(k='-STAINLESS_STEEL_WEIGHT-', size=(15)), sg.T('Нерж. сталь [кг.]')],
-    [sg.I(k='-STEEL_WEIGHT-', size=(15)),
-     sg.T('Сталь [кг.] ')],
+    [sg.I(k='-STEEL_WEIGHT-', size=(15)), sg.T('Сталь [кг.] ')],
     [sg.T('- - - ')]
-
 
 ]
 
@@ -32,32 +30,37 @@ working_conditions = [
     [sg.I(k='-MEDIA-', size=(15)), sg.T('Среда')],
 ]
 
+fej_screw = [ 
+    
+    [sg.T('ТКАНЕВАЯ ЧАСТЬ', font='GothamPro 15') , sg.T('КРЕПЕЖ', font='GothamPro 15'),],
 
-fabric_col_1 = [
-    [sg.T('ТКАНЕВАЯ ЧАСТЬ', font='GothamPro 15')],
+    [sg.I(key='-FEJ_AREA-', size=(15)), sg.T('Площадь ТК [м2]', size=(15, 1)), ],
 
-    [sg.T('Площадь ТК [м2]', size=(15, 1)), sg.I(key='-FEJ_AREA-', size=(15)), ],
+    [sg.I(k='-FABRIC_WIDTH-', size=(15, 1)) ,sg.T('Ширина полотна [мм]', font='Gotham 10',),],
 
-    [sg.T('Ширина полотна [мм]', font='Gotham 10',), sg.I(k='-FABRIC_WIDTH-', size=(15, 1))],
 
     [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-LAYER-', size=(30, 15)), ],
+
+    [sg.T('Усиление фланца' , font = 'GothamPro 12')],
+    [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-FLANGE_REINFORCEMENT-', size=(30, 15)), ],
 
     [sg.B('добавить', k='ADD_L'),  sg.B('удалить', k='DEL_L'), ],
 
     [sg.Listbox(values=chosed_fej_layers, k='-LAYERS_LIST-', size=(30, 10)), ],
 
     [sg.VPush()],
-]
-screw_col_2 = [
 
-    [sg.T('КРЕПЕЖ', font='GothamPro 15')],
-    [sg.T('Кол-во [шт.]', size=(10, 1)), sg.I(k='-SCREW_QTY-', size=(5))],
+
+    [sg.I(k='-SCREW_QTY-', size=(5)), sg.T('Кол-во [шт.]', size=(10, 1)),],
+    [sg.T('---')],
 
     [sg.Combo(values=list(P.raw_screw_prices.keys()), k='-SCREW-',
               size=(15, 15))],
     [sg.B('добавить', k='ADD_S'), sg.B('удалить', k='DEL_S')],
     [sg.Listbox(values=chosed_screw, k='-SCREW_LIST-',
                 size=(30, 10)), ],
+
+    
 ]
 
 
@@ -72,7 +75,8 @@ layout = [
 
     [sg.Col(metall_col_1), sg.Col(working_conditions)],
 
-    [sg.Col(fabric_col_1), sg.Col(screw_col_2)],
+    fej_screw,
+    [sg.VPush()],
     [sg.HorizontalSeparator()],
     [sg.T("Изоляция", font='GothamPro 15 bold', text_color='gold')],
     [sg.I(k='-INSOLATION_VOLUME-', size=(15, 1),), sg.T('Объем изоляции')],
@@ -151,18 +155,24 @@ while True:
             fej_layers = ', \n'.join(chosed_fej_layers)
             fej_area = v['-FEJ_AREA-']
 
-            steel_weight = v['-STEEL_WEIGHT-']
-            steel_cost = P.raw_metall_prices['steel'] * int(steel_weight)
-            stain_less_steel_weight = int(v['-STAINLESS_STEEL_WEIGHT-'])
+            steel_weight = float(v['-STEEL_WEIGHT-'])
+            steel_cost = P.raw_metall_prices['steel'] * steel_weight
+            stain_less_steel_weight = float(v['-STAINLESS_STEEL_WEIGHT-'])
             stain_less_steel_cost = P.raw_metall_prices['stainless steel'] * \
                 stain_less_steel_weight
             temperature = v['-TEMPERATURE-']
             pressure = v['-PRESSURE-']
             media = v['-MEDIA-']
             screw_cost = cl.calculate_screw(chosed_screw)
+            flange_reinforcement = v['-FLANGE_REINFORCEMENT-']
 
             fej_cost = cl.calculate_fabric_layers(
-                chosed_fej_layers, v['-FEJ_AREA-'] , v['-FABRIC_WIDTH-'])
+                chosed_fej_layers,
+                v['-FEJ_AREA-'] , 
+                v['-FABRIC_WIDTH-'],
+                flange_reinforcement
+
+                )
 
                 
             insolation_volume = 0 if v['-INSOLATION_VOLUME-'] == '' else float(v['-INSOLATION_VOLUME-'])
@@ -195,6 +205,7 @@ while True:
                     fej_layers,
                     fej_area,
                     fej_cost,
+                    flange_reinforcement,
                     insolation_volume,
                     insolation_cost,
                     screw,
