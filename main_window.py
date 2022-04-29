@@ -1,4 +1,5 @@
 from email.policy import default
+from turtle import color
 import PRICES as P
 import PySimpleGUI as sg
 import calculations as cl
@@ -17,7 +18,7 @@ item_types = [
 
 frame_screw_layout = [
         [sg.I(k='-SCREW_QTY-', size=(5)), sg.T('Кол-во [шт.]', size=(10, 1)),],
-        [sg.Combo(values=list(P.raw_screw_prices.keys()), k='-SCREW-',size=(15, 15)), sg.B('➕', k='ADD_S'), sg.B('➖', k='DEL_S')],
+        [sg.Combo(values=list(P.raw_screw_prices.keys()), k='-SCREW-',size=(15, 15)), sg.B('➕', k='ADD_S', button_color='whiteongreen'), sg.B('➖', k='DEL_S' ,button_color='whiteoncoral')],
         [sg.Listbox(values=chosed_screw, k='-SCREW_LIST-',
                 size=(30, 10)), ],
 ]
@@ -26,9 +27,10 @@ frame_fabric_layout = [
         [sg.T('ТКАНЕВАЯ ЧАСТЬ', font='GothamPro 15') , sg.T('КРЕПЕЖ', font='GothamPro 15'),],
         [sg.I(key='-FEJ_AREA-', size=(15)), sg.T('Площадь ТК [м2]', size=(15, 1)), ],
         [sg.I(k='-FABRIC_WIDTH-', size=(15, 1)) ,sg.T('Ширина полотна [мм]', font='Gotham 10',),],
-        [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-LAYER-', size=(30, 15)), ],
         [sg.T('Усиление фланца' , font = 'GothamPro 12')],
-        [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-FLANGE_REINFORCEMENT-', size=(30, 15)), sg.B('➕', k='ADD_L'),  sg.B('➖', k='DEL_L'),],
+        [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-FLANGE_REINFORCEMENT-', size=(30, 15)),],
+        [sg.T('Слои от внутренних к наружным' , font = 'GothamPro 12')],
+        [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-LAYER-', size=(30, 15)), sg.B('➕', k='ADD_L' , button_color='whiteongreen' ),  sg.B('➖', k='DEL_L' ,button_color='whiteoncoral') ],
         [sg.Listbox(values=chosed_fej_layers, k='-LAYERS_LIST-', size=(30, 10)), ],
 
 ]
@@ -117,7 +119,7 @@ while True:
         cl.calculate_insolation(insolation_volume)
 
     if e == '-REPORT-':
-        try:
+        # try:
 
             screw = '; \n'.join([', '.join(i) for i in chosed_screw])
             client = v['-CLIENT-']
@@ -187,8 +189,8 @@ while True:
 
 
             )
-        except:
-            sg.popup('похоже где то не введены данные')
+        # except:
+        #     sg.popup('похоже где то не введены данные')
 
 
 
