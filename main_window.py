@@ -15,90 +15,62 @@ item_types = [
 ]  
 
 
-metall_col_1 = [
-    [sg.T('Металл', font='GothamPro 15', text_color='#fff', )],
-    [sg.I(k='-STAINLESS_STEEL_WEIGHT-', size=(15)), sg.T('Нерж. сталь [кг.]')],
-    [sg.I(k='-STEEL_WEIGHT-', size=(15)), sg.T('Сталь [кг.] ')],
-    [sg.T('- - - ')]
-
-]
-
-working_conditions = [
-    [sg.T('Рабочие условия:', font='GothamPro 15')],
-    [sg.I(k='-TEMPERATURE-', size=(15, 1)), sg.T('Температура, [°С]')],
-    [sg.I(k='-PRESSURE-', size=(15)),  sg.T('Давление, [бар]')],
-    [sg.I(k='-MEDIA-', size=(15)), sg.T('Среда')],
-]
-
-fej_screw = [ 
-    
-    [sg.T('ТКАНЕВАЯ ЧАСТЬ', font='GothamPro 15') , sg.T('КРЕПЕЖ', font='GothamPro 15'),],
-
-    [sg.I(key='-FEJ_AREA-', size=(15)), sg.T('Площадь ТК [м2]', size=(15, 1)), ],
-
-    [sg.I(k='-FABRIC_WIDTH-', size=(15, 1)) ,sg.T('Ширина полотна [мм]', font='Gotham 10',),],
-
-
-    [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-LAYER-', size=(30, 15)), ],
-
-    [sg.T('Усиление фланца' , font = 'GothamPro 12')],
-    [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-FLANGE_REINFORCEMENT-', size=(30, 15)), ],
-
-    [sg.B('добавить', k='ADD_L'),  sg.B('удалить', k='DEL_L'), ],
-
-    [sg.Listbox(values=chosed_fej_layers, k='-LAYERS_LIST-', size=(30, 10)), ],
-
-    [sg.VPush()],
-
-
-    [sg.I(k='-SCREW_QTY-', size=(5)), sg.T('Кол-во [шт.]', size=(10, 1)),],
-    [sg.T('---')],
-
-    [sg.Combo(values=list(P.raw_screw_prices.keys()), k='-SCREW-',
-              size=(15, 15))],
-    [sg.B('добавить', k='ADD_S'), sg.B('удалить', k='DEL_S')],
-    [sg.Listbox(values=chosed_screw, k='-SCREW_LIST-',
+frame_screw_layout = [
+        [sg.I(k='-SCREW_QTY-', size=(5)), sg.T('Кол-во [шт.]', size=(10, 1)),],
+        [sg.Combo(values=list(P.raw_screw_prices.keys()), k='-SCREW-',size=(15, 15)), sg.B('➕', k='ADD_S'), sg.B('➖', k='DEL_S')],
+        [sg.Listbox(values=chosed_screw, k='-SCREW_LIST-',
                 size=(30, 10)), ],
-
-    
 ]
 
+frame_fabric_layout = [
+        [sg.T('ТКАНЕВАЯ ЧАСТЬ', font='GothamPro 15') , sg.T('КРЕПЕЖ', font='GothamPro 15'),],
+        [sg.I(key='-FEJ_AREA-', size=(15)), sg.T('Площадь ТК [м2]', size=(15, 1)), ],
+        [sg.I(k='-FABRIC_WIDTH-', size=(15, 1)) ,sg.T('Ширина полотна [мм]', font='Gotham 10',),],
+        [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-LAYER-', size=(30, 15)), ],
+        [sg.T('Усиление фланца' , font = 'GothamPro 12')],
+        [sg.Combo(values=list(P.raw_fabric_prices.keys()), k='-FLANGE_REINFORCEMENT-', size=(30, 15)), sg.B('➕', k='ADD_L'),  sg.B('➖', k='DEL_L'),],
+        [sg.Listbox(values=chosed_fej_layers, k='-LAYERS_LIST-', size=(30, 10)), ],
+
+]
 
 layout = [
-    [sg.Col([
         [sg.I(k='-CLIENT-', size=(15, 1)), sg.T('Заказчик'), ],
         [sg.I(k='-DRAWING_NUM-', size=(15, 1)), sg.T('Номер чертежа')],
         [sg.Combo(values=item_types, size=(15, 1),
                   k='-FEJ_TYPE-'), sg.T('Тип ТК')],
-    ]),
-    ],
+        #   METALL 
+        [sg.T('Металл', font='GothamPro 15', text_color='#fff', )],
+        [sg.I(k='-STAINLESS_STEEL_WEIGHT-', size=(15)), sg.T('Нерж. сталь [кг.]')],
+        [sg.I(k='-STEEL_WEIGHT-', size=(15)), sg.T('Сталь [кг.] ')],
+        #  WORK CONDITION 
+        [sg.T('Рабочие условия:', font='GothamPro 15')],
+        [sg.I(k='-TEMPERATURE-', size=(15, 1)), sg.T('Температура, [°С]')],
+        [sg.I(k='-PRESSURE-', size=(15)),  sg.T('Давление, [бар]')],
+        [sg.I(k='-MEDIA-', size=(15)), sg.T('Среда')],
+        #  FABRIC
+        # [sg.VPush()],
+        sg.vtop( [  sg.Frame('тканевая часть',frame_fabric_layout) , sg.Frame('крепеж', frame_screw_layout)  ]),
 
-    [sg.Col(metall_col_1), sg.Col(working_conditions)],
+        # SCREW 
+        #INSOLATION  
+        [sg.T("Изоляция", font='GothamPro 15 bold', text_color='gold')],
+        [sg.I(k='-INSOLATION_VOLUME-', size=(15, 1),), sg.T('Объем изоляции')],
+        # FOOTER
+        [sg.Ok(),sg.Cancel(),sg.B('Отчет', k='-REPORT-'),],
+            
 
-    fej_screw,
-    [sg.VPush()],
-    [sg.HorizontalSeparator()],
-    [sg.T("Изоляция", font='GothamPro 15 bold', text_color='gold')],
-    [sg.I(k='-INSOLATION_VOLUME-', size=(15, 1),), sg.T('Объем изоляции')],
 
-    [sg.HorizontalSeparator()],
+    ]
 
-    # FOOTER
 
-    [
-        sg.Ok(),
-        sg.Cancel(),
-        sg.B('Отчет', k='-REPORT-'),
-    ],
-    [
-        sg.T('*не целые числа с точкой. Если значения отсутствуют ставим 0',
-             font='GothamPro 8', text_color='lightgreen')
 
-    ],
 
-]
 
-window = sg.Window('cost price app', layout, size=(800, 800))
+
+
+
+
+window = sg.Window('cost price app', layout, size=(800, 800) , element_justification='lt')
 
 while True:
     e, v = window.read()
