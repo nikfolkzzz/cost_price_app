@@ -17,14 +17,15 @@ item_types = [
 
 
 frame_screw_layout = [
+        [ sg.T('КРЕПЕЖ', font='GothamPro 15'),],
         [sg.I(k='-SCREW_QTY-', size=(5)), sg.T('Кол-во [шт.]', size=(10, 1)),],
-        [sg.Combo(values=list(P.raw_screw_prices.keys()), k='-SCREW-',size=(15, 15)), sg.B('➕', k='ADD_S', button_color='whiteongreen'), sg.B('➖', k='DEL_S' ,button_color='whiteoncoral')],
+        [sg.Combo(values=list(P.raw_screw_prices.keys()), k='-SCREW-',size=(30, 15)), sg.B('➕', k='ADD_S', button_color='whiteongreen'), sg.B('➖', k='DEL_S' ,button_color='whiteoncoral')],
         [sg.Listbox(values=chosed_screw, k='-SCREW_LIST-',
                 size=(30, 10)), ],
 ]
 
 frame_fabric_layout = [
-        [sg.T('ТКАНЕВАЯ ЧАСТЬ', font='GothamPro 15') , sg.T('КРЕПЕЖ', font='GothamPro 15'),],
+        [sg.T('ТКАНЕВАЯ ЧАСТЬ', font='GothamPro 15') ,],
         [sg.I(key='-FEJ_AREA-', size=(15)), sg.T('Площадь ТК [м2]', size=(15, 1)), ],
         [sg.I(k='-FABRIC_WIDTH-', size=(15, 1)) ,sg.T('Ширина полотна [мм]', font='Gotham 10',),],
         [sg.T('Усиление фланца' , font = 'GothamPro 12')],
@@ -51,7 +52,7 @@ layout = [
         [sg.I(k='-MEDIA-', size=(15)), sg.T('Среда')],
         #  FABRIC
         # [sg.VPush()],
-        sg.vtop( [  sg.Frame('тканевая часть',frame_fabric_layout) , sg.Frame('крепеж', frame_screw_layout)  ]),
+        sg.vtop( [  sg.Frame('',frame_fabric_layout) , sg.Frame('', frame_screw_layout)  ]),
 
         # SCREW 
         #INSOLATION  
