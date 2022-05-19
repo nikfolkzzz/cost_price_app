@@ -1,5 +1,3 @@
-from email.policy import default
-from turtle import color
 import PRICES as P
 import PySimpleGUI as sg
 import calculations as cl
@@ -52,7 +50,7 @@ layout = [
         [sg.I(k='-MEDIA-', size=(15)), sg.T('Среда')],
         #  FABRIC
         # [sg.VPush()],
-        sg.vtop( [  sg.Frame('',frame_fabric_layout) , sg.Frame('', frame_screw_layout)  ]),
+        sg.vtop( [  sg.Frame('',frame_fabric_layout) , sg.Frame('', frame_screw_layout, expand_y=True)  ]),
 
         # SCREW 
         #INSOLATION  
@@ -60,6 +58,7 @@ layout = [
         [sg.I(k='-INSOLATION_VOLUME-', size=(15, 1),), sg.T('Объем изоляции')],
         # FOOTER
         [sg.Ok(),sg.Cancel(),sg.B('Отчет', k='-REPORT-'),],
+        [sg.T('Цифры через точку.',text_color = 'lightgreen')],
             
 
 

@@ -22,7 +22,7 @@ def calculate_metall_price(data):
         ssp = P.raw_metall_prices['stainless steel']
 
         sw, ssw = validate(data)
-        total_metal_price = sp*sw + ssp*ssw
+        total_metal_price = round(sp*sw + ssp*ssw,2)
         return total_metal_price
     except:
         return
